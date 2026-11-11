@@ -4,23 +4,31 @@ import { useState, type FormEvent } from 'react';
 import { ArrowIcon } from './Icons';
 
 type Field = 'name' | 'email' | 'message';
-type Status = { kind: 'idle' | 'sending' | 'error' | 'success'; message: string };
+type Status = { kind: 'idle' | 'sending' | 'error' | 'success'; message: string; link?: string };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function check(field: Field, value: string): string {
+/** `emailRequired` is false when messages go out over WhatsApp instead of email. */
+function check(field: Field, value: string, emailRequired = true): string {
   const v = value.trim();
   if (field === 'name') return v ? '' : 'Please enter your name.';
-  if (field === 'email') return !v ? 'Please enter your email.' : EMAIL_RE.test(v) ? '' : 'Please enter a valid email address.';
+  if (field === 'email') {
+    if (!v) return emailRequired ? 'Please enter your email.' : '';
+    return EMAIL_RE.test(v) ? '' : 'Please enter a valid email address.';
+  }
   return v.length >= 10 ? '' : 'Please write a message (at least 10 characters).';
 }
 
-export default function ContactForm({ enabled, email }: { enabled: boolean; email: string }) {
+/**
+ * Sends through the email API when it is configured. Until then (or as the main route),
+ * the message is handed to WhatsApp, pre-filled, so a visitor can always reach Ali.
+ */
+export default function ContactForm({ enabled, whatsapp }: { enabled: boolean; whatsapp: string }) {
   const [errors, setErrors] = useState<Record<Field, string>>({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<Status>({ kind: 'idle', message: '' });
 
   const onBlur = (field: Field, value: string) => {
-    if (errors[field]) setErrors((e) => ({ ...e, [field]: check(field, value) }));
+    if (errors[field]) setErrors((e) => ({ ...e, [field]: check(field, value, enabled) }));
   };
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -33,9 +41,9 @@ export default function ContactForm({ enabled, email }: { enabled: boolean; emai
       message: String(data.get('message') ?? ''),
     };
     const next = {
-      name: check('name', values.name),
-      email: check('email', values.email),
-      message: check('message', values.message),
+      name: check('name', values.name, enabled),
+      email: check('email', values.email, enabled),
+      message: check('message', values.message, enabled),
     };
     setErrors(next);
     const firstBad = (Object.keys(next) as Field[]).find((k) => next[k]);
@@ -46,9 +54,14 @@ export default function ContactForm({ enabled, email }: { enabled: boolean; emai
     }
 
     if (!enabled) {
+      const mail = values.email.trim();
+      const text = [`Hi Ali, I'm ${values.name.trim()}.`, ...(mail ? [`Email: ${mail}`] : []), '', values.message.trim()].join('\n');
+      const link = `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
+      window.open(link, '_blank', 'noopener,noreferrer');
       setStatus({
-        kind: 'error',
-        message: 'Not sent — this form isn’t connected to an email service yet. Your message is still here.',
+        kind: 'success',
+        message: 'WhatsApp is opening with your message — just press send there.',
+        link,
       });
       return;
     }
@@ -82,14 +95,7 @@ export default function ContactForm({ enabled, email }: { enabled: boolean; emai
     <form className="form" id="contact-form" noValidate onSubmit={onSubmit} aria-describedby={enabled ? undefined : 'form-setup'}>
       {!enabled && (
         <p className="form__setup" id="form-setup">
-          <strong>Setup required:</strong> this form isn’t connected to an email service yet, so messages can’t be sent
-          from here{email ? (
-            <>
-              {' '}
-              — please email <a href={`mailto:${email}`}>{email}</a> instead
-            </>
-          ) : null}
-          .
+          Your message opens in <strong>WhatsApp</strong>, ready to send — the quickest way to reach me.
         </p>
       )}
       <div className="form__row">
@@ -101,8 +107,8 @@ export default function ContactForm({ enabled, email }: { enabled: boolean; emai
           </p>
         </div>
         <div className="field">
-          <label htmlFor="f-email">Email</label>
-          <input type="email" autoComplete="email" maxLength={254} {...fieldProps('email')} />
+          <label htmlFor="f-email">Email{enabled ? '' : ' (optional)'}</label>
+          <input type="email" autoComplete="email" maxLength={254} {...fieldProps('email')} required={enabled} />
           <p className="field__err" id="f-email-err">
             {errors.email}
           </p>
@@ -122,10 +128,18 @@ export default function ContactForm({ enabled, email }: { enabled: boolean; emai
       </div>
       <div className="form__foot">
         <button className="btn btn--black" type="submit" disabled={status.kind === 'sending'}>
-          Send Message <ArrowIcon />
+          {enabled ? 'Send Message' : 'Send on WhatsApp'} <ArrowIcon />
         </button>
         <p className="form__status" role="status" aria-live="polite" data-kind={status.kind}>
           {status.message}
+          {status.link && (
+            <>
+              {' '}
+              <a href={status.link} target="_blank" rel="noopener noreferrer">
+                Didn’t open? Tap here.
+              </a>
+            </>
+          )}
         </p>
       </div>
     </form>

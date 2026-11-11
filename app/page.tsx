@@ -1,6 +1,6 @@
 import Motion from '@/components/Motion';
 import SiteHeader from '@/components/SiteHeader';
-import { About, Contact, Footer, Hero, Process, Projects, Services, Testimonials, Workspace } from '@/components/Sections';
+import { About, Agency, Contact, Footer, Hero, Process, Projects, Services, Testimonials } from '@/components/Sections';
 import { isContactConfigured } from '@/lib/contact';
 
 export default function Home() {
@@ -12,12 +12,12 @@ export default function Home() {
       <SiteHeader />
       <main id="main">
         <Hero />
-        <Services />
         <Projects />
+        <Agency />
+        <Services />
         <About />
         <Process />
         <Testimonials />
-        <Workspace />
         <Contact formEnabled={isContactConfigured()} />
       </main>
       <Footer />

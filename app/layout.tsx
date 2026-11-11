@@ -23,7 +23,7 @@ const siteUrl =
   (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000');
 
 const title = `${profile.name} — ${profile.role}`;
-const description = `${profile.name} is a developer who builds responsive websites and thoughtful digital experiences.`;
+const description = `${profile.name} is the founder of Brandox Digital in Peshawar, building websites, online stores, web apps and POS software that help businesses grow.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
