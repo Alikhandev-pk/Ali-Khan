@@ -330,12 +330,18 @@ button, input, textarea { font: inherit; color: inherit; }
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 255, 255, .22) 0%, rgba(255, 255, 255, 0) 66%);
 }
-.hero__frame { position: absolute; inset: 8px 0 0; }
-.hero__frame img {
-  object-fit: contain;
-  object-position: center bottom;
-  filter: drop-shadow(0 24px 40px rgba(10, 20, 60, .25));
+/* Official photo in an arch that rises from the bottom edge of the hero */
+.hero__frame {
+  position: absolute;
+  inset: clamp(8px, 3vw, 40px) clamp(0px, 3vw, 48px) 0;
+  overflow: hidden;
+  border-radius: 999px 999px 0 0;
+  border: 6px solid rgba(255, 255, 255, .9);
+  border-bottom: 0;
+  background: #8f8a86;
+  box-shadow: 0 30px 60px -30px rgba(10, 20, 60, .5);
 }
+.hero__frame img { object-fit: cover; object-position: center 25%; }
 
 .hero__social {
   grid-column: 3; grid-row: 1;
@@ -853,7 +859,7 @@ a.channels__value:hover { color: var(--blue); }
     grid-column: 1 / -1; grid-row: 4;
     justify-self: center;
     width: min(100%, 520px);
-    aspect-ratio: 1086 / 1448;
+    aspect-ratio: 4 / 5;
     margin-top: 16px;
   }
   .hero__frame { inset: 0; }

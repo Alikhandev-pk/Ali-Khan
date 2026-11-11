@@ -45,14 +45,8 @@ export const profile = {
   heroNote: 'Founder & CEO of Brandox Digital — a web and software agency in Peshawar, Pakistan.',
   about:
     'I’m the founder and CEO of Brandox Digital, a web and software agency in Peshawar. I help clinics, schools, shops, consultancies and showrooms build a strong online presence — fast, mobile-first websites, product catalogues and custom web apps that turn visitors into calls, WhatsApp chats and walk-ins.',
+  /** Official photo, shown in an arch frame in the hero. */
   portrait: {
-    src: '/images/ali-khan-hero.png',
-    alt: 'Ali Khan in a white T-shirt with his arms crossed',
-    width: 1086,
-    height: 1448,
-  } satisfies Img,
-  /** Formal photo shown in About Me. */
-  photo: {
     src: '/images/ali-khan-founder.jpg',
     alt: 'Ali Khan, founder of Brandox Digital, in a dark blazer and white shirt',
     width: 1122,

@@ -351,20 +351,9 @@ export function About() {
   return (
     <section className="section wrap" id="about" aria-labelledby="about-title">
       <div className="about">
-        <div>
-          <h2 className="h2 about__title" id="about-title" data-anim="heading">
-            About Me
-          </h2>
-          <div className="about__photo" data-anim="heading">
-            <Image
-              src={profile.photo.src}
-              alt={profile.photo.alt}
-              fill
-              quality={85}
-              sizes="(min-width: 1024px) 420px, (min-width: 681px) 360px, 92vw"
-            />
-          </div>
-        </div>
+        <h2 className="h2 about__title" id="about-title" data-anim="heading">
+          About Me
+        </h2>
         <div className="about__body" data-anim="heading">
           <p className="about__lead">{profile.about}</p>
           {experience.length > 0 && (
