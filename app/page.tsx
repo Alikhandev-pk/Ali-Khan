@@ -1,11 +1,13 @@
 import Motion from '@/components/Motion';
 import SiteHeader from '@/components/SiteHeader';
+import StructuredData from '@/components/StructuredData';
 import { About, Agency, Contact, Footer, Hero, Process, Projects, Services, Testimonials } from '@/components/Sections';
 import { isContactConfigured } from '@/lib/contact';
 
 export default function Home() {
   return (
     <Motion>
+      <StructuredData />
       <a className="skip-link" href="#main">
         Skip to content
       </a>

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
-import { profile } from '@/content/site';
+import { agency, profile } from '@/content/site';
+import { siteUrl } from '@/lib/site-url';
 import './globals.css';
 
 const anton = localFont({
@@ -17,24 +18,46 @@ const dmSans = localFont({
   display: 'swap',
 });
 
-// No production domain is hard-coded: set NEXT_PUBLIC_SITE_URL, or let Vercel provide its project URL.
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000');
-
-const title = `${profile.name} — ${profile.role}`;
-const description = `${profile.name} is the founder of Brandox Digital in Peshawar, building websites, online stores, web apps and POS software that help businesses grow.`;
+const title = `${profile.name} — Web Developer in Peshawar | Founder of ${agency.name}`;
+const description = `${profile.name} is a web developer in Peshawar, Pakistan and founder of ${agency.name}. Fast, mobile-first websites, online stores, web apps and POS software for clinics, schools, shops and local businesses.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title,
+  title: { default: title, template: `%s | ${profile.name}` },
   description,
+  applicationName: profile.name,
+  authors: [{ name: profile.name, url: siteUrl }],
+  creator: profile.name,
+  publisher: agency.name,
+  category: 'technology',
+  keywords: [
+    'Ali Khan',
+    'Ali Khan web developer',
+    'Ali Khan Brandox Digital',
+    'web developer in Peshawar',
+    'website developer Peshawar',
+    'web design Peshawar',
+    'freelance web developer Pakistan',
+    'ecommerce website Pakistan',
+    'POS software Pakistan',
+    'Brandox Digital',
+  ],
+  alternates: { canonical: '/' },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
+  },
   openGraph: {
-    type: 'website',
+    type: 'profile',
+    url: '/',
     title,
     description,
     siteName: profile.name,
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${profile.name}, ${profile.role}` }],
+    locale: 'en_US',
+    firstName: 'Ali',
+    lastName: 'Khan',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${profile.name}, web developer in Peshawar` }],
   },
   twitter: {
     card: 'summary_large_image',

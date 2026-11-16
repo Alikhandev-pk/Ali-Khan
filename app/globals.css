@@ -690,6 +690,19 @@ a.work__link:hover { color: var(--blue); }
   max-width: 54%;
 }
 .contact__middle .small { color: var(--muted); max-width: 34ch; }
+.contact__note { display: grid; gap: 16px; }
+.contact__me { display: flex; align-items: center; gap: 14px; }
+.contact__avatar {
+  position: relative;
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #8f8a86;
+  box-shadow: 0 0 0 3px var(--yellow), 0 12px 24px -12px rgba(10, 20, 60, .5);
+}
+.contact__avatar img { object-fit: cover; object-position: center 22%; transform: scale(1.5); transform-origin: center 22%; }
+.contact__me .small strong { display: block; color: var(--black); font-size: 16px; }
+.contact__me .small span { display: block; }
 
 .contact__body {
   display: grid;

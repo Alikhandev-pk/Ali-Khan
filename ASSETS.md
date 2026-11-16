@@ -29,7 +29,7 @@ Full URL pattern: `https://images.unsplash.com/<photo ID>`
 - `dm-sans-latin.woff2` — DM Sans, variable 400–700 (SIL Open Font License, see `dm-sans-OFL.txt`)
 
 ## Founder photo
-`public/images/ali-khan-founder.jpg` is Ali Khan's own photo (shown in About Me), copied unchanged.
+`public/images/ali-khan-web-developer-peshawar.jpg` is Ali Khan's own photo (hero, About Me, Contact and the share image `public/og-image.png`), saved from the original at JPEG quality 92.
 
 ## Client work (real projects, from brandox.digital)
 | File | Shows |

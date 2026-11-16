@@ -351,9 +351,20 @@ export function About() {
   return (
     <section className="section wrap" id="about" aria-labelledby="about-title">
       <div className="about">
-        <h2 className="h2 about__title" id="about-title" data-anim="heading">
-          About Me
-        </h2>
+        <div>
+          <h2 className="h2 about__title" id="about-title" data-anim="heading">
+            About Me
+          </h2>
+          <div className="about__photo" data-anim="heading">
+            <Image
+              src={profile.portrait.src}
+              alt={profile.portrait.alt}
+              fill
+              quality={85}
+              sizes="(min-width: 1024px) 420px, (min-width: 681px) 360px, 92vw"
+            />
+          </div>
+        </div>
         <div className="about__body" data-anim="heading">
           <p className="about__lead">{profile.about}</p>
           {experience.length > 0 && (
@@ -489,10 +500,21 @@ export function Contact({ formEnabled }: { formEnabled: boolean }) {
           Hire Me <ArrowIcon />
           <span className="sr-only"> on WhatsApp (opens in a new tab)</span>
         </a>
-        <p className="small" data-anim="contact-fade">
-          Need a new website, an online store or custom software for your business? Tell me a little about your idea —
-          the consultation is free and you get a fixed price.
-        </p>
+        <div className="contact__note" data-anim="contact-fade">
+          <div className="contact__me">
+            <span className="contact__avatar">
+              <Image src={profile.portrait.src} alt="" fill quality={82} sizes="72px" />
+            </span>
+            <p className="small">
+              <strong>{profile.name}</strong>
+              <span>Founder, {agency.name}</span>
+            </p>
+          </div>
+          <p className="small">
+            Need a new website, an online store or custom software for your business? Tell me a little about your idea —
+            the consultation is free and you get a fixed price.
+          </p>
+        </div>
       </div>
       <div className="contact__body">
         <ul className="channels" aria-label="Contact details">
