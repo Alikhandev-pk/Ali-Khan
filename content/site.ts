@@ -152,7 +152,7 @@ export const socials: { label: SocialLabel; url: string }[] = [
   { label: 'WhatsApp', url: whatsappLink() },
   { label: 'Instagram', url: 'https://www.instagram.com/brandoxdigital/' },
   { label: 'Facebook', url: 'https://www.facebook.com/brandoxdigital' },
-  { label: 'GitHub', url: '' }, // e.g. 'https://github.com/your-username'
+  { label: 'GitHub', url: 'https://github.com/Alikhandev-pk' },
   { label: 'LinkedIn', url: '' }, // e.g. 'https://www.linkedin.com/in/your-profile'
 ];
 
