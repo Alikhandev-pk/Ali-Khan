@@ -2,8 +2,8 @@ import Image from 'next/image';
 import {
   agency,
   contact,
-  experience,
   extraServices,
+  marquee,
   navLinks,
   process,
   profile,
@@ -25,7 +25,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 /** Photo that fills its frame. `parallax` adds an oversized inner layer GSAP can move on desktop. */
 function Photo({ image, sizes, parallax = false }: { image: Img; sizes: string; parallax?: boolean }) {
-  const img = <Image src={image.src} alt={image.alt} fill sizes={sizes} quality={82} className="media__img" />;
+  const img = <Image src={image.src} alt={image.alt} fill sizes={sizes} quality={90} className="media__img" />;
   return parallax ? (
     <div className="media__parallax" data-parallax>
       {img}
@@ -38,7 +38,7 @@ function Photo({ image, sizes, parallax = false }: { image: Img; sizes: string; 
 function SectionHead({ id, title, note, label }: { id: string; title: string; note: string; label?: string }) {
   return (
     <div className="section__head">
-      <h2 className="h2" id={id} data-anim="heading">
+      <h2 className="h2" id={id} data-split>
         {title}
       </h2>
       <p className="small section__note" data-anim="heading">
@@ -67,9 +67,10 @@ export function Hero() {
         <h1 className="hero__title" id="hero-title">
           <span className="sr-only">{profile.name}, </span>
           {profile.heroTitle.map((line) => (
-            <span className="line" key={line}>
+            <span className="line" key={line.text}>
               <span className="line__inner" data-anim="hero-line">
-                {line}
+                {line.hidden && <span className="sr-only">{line.hidden}</span>}
+                {line.text}
               </span>
             </span>
           ))}
@@ -99,10 +100,11 @@ export function Hero() {
               alt={profile.portrait.alt}
               fill
               preload
-              quality={85}
+              quality={95}
               sizes="(min-width: 1024px) 36vw, (min-width: 681px) 520px, 92vw"
             />
           </div>
+          <RingBadge />
         </div>
 
         <div className="hero__social" data-anim="hero-fade">
@@ -121,7 +123,7 @@ export function Hero() {
                 const Icon = socialIcons[s.label];
                 return (
                   <li key={s.label}>
-                    <a className="social" href={s.url} target="_blank" rel="noopener noreferrer">
+                    <a className="social" href={s.url} target="_blank" rel="noopener noreferrer" data-magnetic>
                       <Icon />
                       <span className="sr-only">{s.label} (opens in a new tab)</span>
                     </a>
@@ -130,7 +132,6 @@ export function Hero() {
               })}
             </ul>
           )}
-          <p className="small">{profile.heroNote}</p>
         </div>
 
         <p className="hero__statement" aria-label={profile.heroStatement.join(' ')}>
@@ -147,11 +148,59 @@ export function Hero() {
   );
 }
 
+/** Spinning circular label on the hero portrait (decorative; the same facts are in the H1 and intro). */
+function RingBadge() {
+  const text = 'Full-Stack Developer • Peshawar • Brandox Digital • ';
+  return (
+    <div className="ring" aria-hidden="true">
+      <svg className="ring__text" viewBox="0 0 200 200" data-anim="ring">
+        <defs>
+          <path id="ring-path" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
+        </defs>
+        <text>
+          <textPath href="#ring-path" textLength="488">
+            {text}
+          </textPath>
+        </text>
+      </svg>
+      <span className="ring__core">
+        <ArrowIcon />
+      </span>
+    </div>
+  );
+}
+
+/* --------------------------------- Marquee -------------------------------- */
+export function Marquee() {
+  const row = (hidden: boolean) => (
+    <ul className="marquee__row" aria-hidden={hidden || undefined}>
+      {marquee.map((m) => (
+        <li key={m}>
+          {m}
+          <span className="marquee__star" aria-hidden="true">
+            ✦
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+  return (
+    <div className="marquee-wrap">
+      <div className="marquee">
+        <div className="marquee__track" data-anim="marquee">
+          {row(false)}
+          {row(true)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ---------------------------------- Work ---------------------------------- */
 function CaseStudy({ project: p, index }: { project: Project; index: number }) {
   return (
     <article className="case" data-anim="project">
-      <div className="case__media" data-anim="media">
+      <div className="case__media" data-anim="media" data-tilt>
         <div className="browser">
           <div className="browser__bar" aria-hidden="true">
             <span className="browser__dots">
@@ -166,7 +215,7 @@ function CaseStudy({ project: p, index }: { project: Project; index: number }) {
               src={p.image.src}
               alt={p.image.alt}
               fill
-              quality={82}
+              quality={92}
               sizes="(min-width: 1360px) 760px, (min-width: 1024px) 56vw, 92vw"
               className="browser__img"
             />
@@ -180,7 +229,7 @@ function CaseStudy({ project: p, index }: { project: Project; index: number }) {
       </div>
 
       <div className="case__text" data-anim="project-text">
-        <span className="case__num" aria-hidden="true">
+        <span className="case__num" aria-hidden="true" data-anim="num">
           {pad(index + 1)}
         </span>
         <p className="eyebrow case__cat">{p.category}</p>
@@ -189,13 +238,6 @@ function CaseStudy({ project: p, index }: { project: Project; index: number }) {
         <ul className="case__list">
           {p.highlights.map((h) => (
             <li key={h}>{h}</li>
-          ))}
-        </ul>
-        <ul className="tags case__tags" aria-label="Services delivered">
-          {p.tags.map((t) => (
-            <li className="tag" key={t}>
-              {t}
-            </li>
           ))}
         </ul>
         <div className="case__links">
@@ -243,7 +285,7 @@ export function Agency() {
             </span>
             <span className="eyebrow">My agency · Founder &amp; CEO</span>
           </p>
-          <h2 className="h2" id="brandox-title">
+          <h2 className="h2" id="brandox-title" data-split>
             {agency.name}
           </h2>
           <p className="agency__tagline">“{agency.tagline}”</p>
@@ -274,9 +316,11 @@ export function Agency() {
             {product.name}
           </h3>
           <p className="small pos__desc">{product.description}</p>
-          <ul className="pos__features">
+          <ul className="pos__features" data-anim="cards">
             {product.features.map((f) => (
-              <li key={f}>{f}</li>
+              <li key={f} data-anim-item>
+                {f}
+              </li>
             ))}
           </ul>
           <External
@@ -298,7 +342,7 @@ export function Services() {
       <SectionHead
         id="services-title"
         title="What I Build"
-        note="From a first website to custom software — everything a local business needs to be found online and win more customers."
+        note="Websites, online stores and custom software for growing businesses."
       />
       <div className="services" data-anim="cards">
         {services.map((s, i) => (
@@ -352,7 +396,7 @@ export function About() {
     <section className="section wrap" id="about" aria-labelledby="about-title">
       <div className="about">
         <div>
-          <h2 className="h2 about__title" id="about-title" data-anim="heading">
+          <h2 className="h2 about__title" id="about-title" data-split>
             About Me
           </h2>
           <div className="about__photo" data-anim="heading">
@@ -360,34 +404,29 @@ export function About() {
               src={profile.portrait.src}
               alt={profile.portrait.alt}
               fill
-              quality={85}
+              quality={95}
               sizes="(min-width: 1024px) 420px, (min-width: 681px) 360px, 92vw"
             />
           </div>
         </div>
-        <div className="about__body" data-anim="heading">
-          <p className="about__lead">{profile.about}</p>
-          {experience.length > 0 && (
-            <>
-              <h3 className="eyebrow about__label">Experience</h3>
-              <ul className="experience">
-                {experience.map((e) => (
-                  <li key={`${e.role}-${e.organisation}`}>
-                    <strong>{e.role}</strong> ·{' '}
-                    {e.url ? (
-                      <External className="experience__org" href={e.url}>
-                        {e.organisation}
-                      </External>
-                    ) : (
-                      e.organisation
-                    )}{' '}
-                    <span className="small experience__period">{e.period}</span>
-                    {e.summary && <p className="small">{e.summary}</p>}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
+        <div className="about__body">
+          <p className="about__lead" data-anim="words">
+            {profile.about}
+          </p>
+          <h3 className="eyebrow about__label">Find me online</h3>
+          <p className="small about__note">Explore my public repositories and contributions on GitHub.</p>
+          <ul className="about__links">
+            <li>
+              <External className="work__link" href={profile.github}>
+                Ali Khan on GitHub <ArrowIcon />
+              </External>
+            </li>
+            <li>
+              <External className="work__link" href={profile.founderPage}>
+                Founder profile at {agency.name} <ArrowIcon />
+              </External>
+            </li>
+          </ul>
           {skills.length > 0 && (
             <>
               <h3 className="eyebrow about__label">Skills &amp; focus</h3>
@@ -421,8 +460,11 @@ export function Process() {
       <SectionHead
         id="process-title"
         title="How We Work"
-        note="Four simple steps — you always know the price, see the design first, and get support after launch."
+        note="Fixed price, design first, support after launch."
       />
+      <div className="process__track" aria-hidden="true">
+        <span data-anim="track" />
+      </div>
       <ol className="process" data-anim="cards">
         {process.map((step, i) => (
           <li className="step" key={step.title} data-anim-item>
@@ -496,6 +538,7 @@ export function Contact({ formEnabled }: { formEnabled: boolean }) {
           target="_blank"
           rel="noopener noreferrer"
           data-anim="contact-button"
+          data-magnetic
         >
           Hire Me <ArrowIcon />
           <span className="sr-only"> on WhatsApp (opens in a new tab)</span>
@@ -503,17 +546,14 @@ export function Contact({ formEnabled }: { formEnabled: boolean }) {
         <div className="contact__note" data-anim="contact-fade">
           <div className="contact__me">
             <span className="contact__avatar">
-              <Image src={profile.portrait.src} alt="" fill quality={82} sizes="72px" />
+              <Image src={profile.portrait.src} alt="" fill quality={90} sizes="120px" />
             </span>
             <p className="small">
               <strong>{profile.name}</strong>
               <span>Founder, {agency.name}</span>
             </p>
           </div>
-          <p className="small">
-            Need a new website, an online store or custom software for your business? Tell me a little about your idea —
-            the consultation is free and you get a fixed price.
-          </p>
+          <p className="small">Tell me about your idea — the consultation is free and the price is fixed.</p>
         </div>
       </div>
       <div className="contact__body">
@@ -607,7 +647,7 @@ export function Footer() {
         )}
       </div>
       <div className="footer__bottom">
-        <a className="logo logo--xl" href="#home" aria-label={`${profile.name}, back to top`}>
+        <a className="logo logo--xl" href="#home" aria-label={`${profile.name}, back to top`} data-anim="footer-name">
           {profile.name.toUpperCase()}
           <span className="dot">.</span>
         </a>

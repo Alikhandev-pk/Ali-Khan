@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
-import { agency, profile } from '@/content/site';
+import { agency, profile, seo } from '@/content/site';
 import { siteUrl } from '@/lib/site-url';
 import './globals.css';
 
@@ -18,52 +18,29 @@ const dmSans = localFont({
   display: 'swap',
 });
 
-const title = `${profile.name} — Web Developer in Peshawar | Founder of ${agency.name}`;
-const description = `${profile.name} is a web developer in Peshawar, Pakistan and founder of ${agency.name}. Fast, mobile-first websites, online stores, web apps and POS software for clinics, schools, shops and local businesses.`;
-
+/**
+ * Site-wide defaults. The homepage sets its own title, canonical URL and social-share
+ * metadata in app/page.tsx; `title.absolute` there keeps the template below from
+ * appending the name a second time.
+ */
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: title, template: `%s | ${profile.name}` },
-  description,
+  title: { default: seo.title, template: `%s | ${profile.name}` },
+  description: seo.description,
   applicationName: profile.name,
   authors: [{ name: profile.name, url: siteUrl }],
   creator: profile.name,
   publisher: agency.name,
   category: 'technology',
-  keywords: [
-    'Ali Khan',
-    'Ali Khan web developer',
-    'Ali Khan Brandox Digital',
-    'web developer in Peshawar',
-    'website developer Peshawar',
-    'web design Peshawar',
-    'freelance web developer Pakistan',
-    'ecommerce website Pakistan',
-    'POS software Pakistan',
-    'Brandox Digital',
-  ],
-  alternates: { canonical: '/' },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
-  },
   openGraph: {
-    type: 'profile',
-    url: '/',
-    title,
-    description,
+    type: 'website',
     siteName: profile.name,
     locale: 'en_US',
-    firstName: 'Ali',
-    lastName: 'Khan',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${profile.name}, web developer in Peshawar` }],
+    images: [seo.shareImage],
   },
   twitter: {
     card: 'summary_large_image',
-    title,
-    description,
-    images: ['/og-image.png'],
+    images: [seo.shareImage.url],
   },
 };
 

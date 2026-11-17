@@ -1,4 +1,4 @@
-import { agency, contact, profile, skills, socials } from '@/content/site';
+import { agency, contact, profile, seo, skills, socials } from '@/content/site';
 import { siteUrl } from '@/lib/site-url';
 
 /**
@@ -6,7 +6,11 @@ import { siteUrl } from '@/lib/site-url';
  * Helps the site show for searches like "Ali Khan web developer" and "web developer in Peshawar".
  */
 export default function StructuredData() {
-  const sameAs = socials.map((s) => s.url).filter((u) => /^https?:\/\//.test(u) && !u.includes('wa.me'));
+  // The Instagram and Facebook accounts belong to the agency; GitHub and the founder page are Ali's own.
+  const agencySameAs = socials
+    .map((s) => s.url)
+    .filter((u) => /^https?:\/\//.test(u) && !u.includes('wa.me') && u !== profile.github);
+  const personSameAs = [profile.github, profile.founderPage];
   const address = {
     '@type': 'PostalAddress',
     addressLocality: 'Peshawar',
@@ -23,14 +27,14 @@ export default function StructuredData() {
         name: profile.name,
         url: `${siteUrl}/`,
         image: `${siteUrl}${profile.portrait.src}`,
-        jobTitle: 'Web Developer & Founder',
+        jobTitle: profile.jobTitle,
         description: profile.about,
         worksFor: { '@id': `${siteUrl}/#agency` },
         address,
         email: contact.email ? `mailto:${contact.email}` : undefined,
         telephone: contact.phone || undefined,
         knowsAbout: skills,
-        sameAs: [...sameAs, agency.url],
+        sameAs: personSameAs,
       },
       {
         '@type': 'ProfessionalService',
@@ -45,7 +49,7 @@ export default function StructuredData() {
         areaServed: ['Peshawar', 'Pakistan'],
         telephone: contact.phone || undefined,
         email: contact.email || undefined,
-        sameAs,
+        sameAs: agencySameAs,
       },
       {
         '@type': 'WebSite',
@@ -59,7 +63,7 @@ export default function StructuredData() {
         '@type': 'ProfilePage',
         '@id': `${siteUrl}/#profile`,
         url: `${siteUrl}/`,
-        name: `${profile.name} — Web Developer in Peshawar`,
+        name: seo.title,
         isPartOf: { '@id': `${siteUrl}/#website` },
         mainEntity: { '@id': `${siteUrl}/#person` },
         primaryImageOfPage: `${siteUrl}${profile.portrait.src}`,

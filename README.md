@@ -29,14 +29,14 @@ Almost everything you'll want to change is in **`content/site.ts`**:
 - **Confirmed details** — name, role, introduction, About text, services.
 - **To fill in** — `contact.email`, `contact.location`, and the `socials` URLs. Empty values are hidden automatically.
 - **Skills** — please confirm or edit the list.
-- **Experience** — optional; nothing is shown while the list is empty.
-- **Projects** — currently **sample projects**, each with a "Sample" badge. Replace the title, description, tags and image, add a `url`, and set `sample: false` once a project is real.
+- **Projects** — real client work: title, category, a one-line description, 3 highlights, screenshot, live `url` and optional `caseStudy` link.
+- **Marquee** — the words in the scrolling band under the hero.
 - **Testimonials** — the section stays hidden until you add real, permission-given quotes.
 - **Workspace gallery** — illustrative stock photos; swap in your own when ready.
 
 Images live in `public/images/`. Give each one its real `width`/`height` and a descriptive `alt`. Photo credits are in `ASSETS.md`.
 
-Styling is in `app/globals.css` (colors at the top). Animations are in `components/Motion.tsx`.
+Styling is in `app/globals.css` (colors at the top). Animations are in `components/Motion.tsx` and use GSAP with ScrollTrigger, SplitText, ScrambleText and CustomEase (all included in the free `gsap` package).
 
 ## Contact form
 
@@ -60,7 +60,7 @@ Social-sharing links use `NEXT_PUBLIC_SITE_URL` if set, otherwise the production
 ## Motion and accessibility
 
 - Animations use only transforms, opacity and clip-path, and are scoped with `useGSAP` so they clean up automatically.
-- Parallax runs only on screens 1024px and wider.
+- Parallax and the layered hero exit run only on screens 1024px and wider; magnetic buttons and the 3D screenshot tilt run only with a mouse.
 - With **reduced motion** turned on, nothing animates and all content shows immediately.
 - If JavaScript or GSAP fails, a 3-second fallback guarantees the hero is visible. Other content is never hidden by CSS.
 - Includes a skip link, an accessible mobile menu (Escape closes it), visible keyboard focus, and sticky-header-aware anchor links.
